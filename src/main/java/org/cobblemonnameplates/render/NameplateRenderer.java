@@ -24,6 +24,11 @@ import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumer;
 
+// 1.21+ 호환성을 위한 추가 임포트 - 직접적인 렌더링 코드로 수정
+import net.minecraft.client.render.VertexFormat.DrawMode;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumerProvider;
+
 public class NameplateRenderer {
     public static void renderNameplate(MatrixStack matrices, Entity entity, Pokemon pokemon, double x, double y, double z, float tickDelta) {
         NameplateConfig config = NameplateConfig.getInstance();
@@ -202,14 +207,16 @@ public class NameplateRenderer {
     }
     
     private static void drawRectangle(MatrixStack matrices, float x, float y, float width, float height, int color) {
-        // Render rectangle using Minecraft's rendering API
+        // Render rectangle using Minecraft's rendering API - 1.21+ compatible
         RenderSystem.enableDepthTest();
         RenderSystem.disableCull();
         
-        // Set up the buffer builder for drawing a rectangle - updated for 1.21+
+        // Use direct RenderSystem methods for 1.21+ compatibility
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        RenderSystem.setShader(GameRenderer.getPositionColorProgram);
+        
+        // For 1.21+, use direct RenderSystem shader methods
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         
         matrices.push();
         
@@ -218,7 +225,7 @@ public class NameplateRenderer {
         float x2 = x + width;
         float y2 = y + height;
         
-        // Add the four vertices of the rectangle - Updated for 1.21+ (removed .next())
+        // Add the four vertices of the rectangle - 1.21+ compatible
         bufferBuilder.vertex(matrices.peek().getPositionMatrix(), x1, y2, 0.0F).color(color);
         bufferBuilder.vertex(matrices.peek().getPositionMatrix(), x2, y2, 0.0F).color(color);
         bufferBuilder.vertex(matrices.peek().getPositionMatrix(), x2, y1, 0.0F).color(color);
@@ -236,23 +243,24 @@ public class NameplateRenderer {
         // Get the identifier for the type icon
         Identifier iconId = CobblemonIcons.getTypeIcon(type);
         
-        // Render the type icon using Minecraft's rendering API
+        // Render the type icon using Minecraft's rendering API - 1.21+ compatible
         RenderSystem.enableDepthTest();
         RenderSystem.disableCull();
-        RenderSystem.setShader(GameRenderer.getPositionTexProgram);
+        // For 1.21+, use proper texture shader method
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         
         matrices.push();
         
         // Set up texture
         RenderSystem.setShaderTexture(0, iconId);
         
-        // Draw the icon (32x32 size) - updated for 1.21+
+        // Draw the icon (32x32 size) - 1.21+ compatible
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEX);
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         float width = 16.0f;
         float height = 16.0f;
         
-        // Add the four vertices of the icon - Updated for 1.21+ (removed .next())
+        // Add the four vertices of the icon - 1.21+ compatible
         bufferBuilder.vertex(matrices.peek().getPositionMatrix(), x, y + height, 0.0F)
             .texture(0.0F, 1.0F).color(0xFFFFFFFF);
         bufferBuilder.vertex(matrices.peek().getPositionMatrix(), x + width, y + height, 0.0F)
