@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "cobblemon-nameplates",
+  "version": "${version}",
+  "name": "Cobblemon Nameplates",
+  "description": "Displays nameplates above all Pokemon (wild and player's stored) in Cobblemon",
+  "authors": [
+    "Your Name"
+  ],
+  "contact": {
+    "homepage": "https://github.com/yourusername/cobblemon-nameplates",
+    "sources": "https://github.com/yourusername/cobblemon-nameplates"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.cobblemonnameplates.NameplateMod"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": "1.21.1",
+    "cobblemon": "1.7.3"
+  }
+}
