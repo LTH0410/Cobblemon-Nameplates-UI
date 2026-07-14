@@ -75,3 +75,11 @@ processResources {
 tasks.named("remapJar") {
     archiveClassifier.set("")
 }
+
+// Ensure that the jar task includes compiled classes and resources
+jar {
+    from sourceSets.main.output
+    from sourceSets.main.resources
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
